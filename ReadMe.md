@@ -1,13 +1,15 @@
-### Setup Python and Flask 
+# Setup Python and Flask 
 Make sure you're in the project directory when you're in the terminal
 
 pull the directory using the command:
 git pull origin master
 
-## Set up the virtual environment using
+### Set up the virtual environment using
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate
 pip install flask
+
+---
 ### Backend
 - GetStock
 	- It receives a stock tag (Ex. CMG, INT, NVD)
