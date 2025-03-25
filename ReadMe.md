@@ -6,7 +6,9 @@ git pull origin master
 
 ### Set up the virtual environment using
 python -m venv venv
+
 venv\Scripts\activate
+
 pip install flask
 
 ---
