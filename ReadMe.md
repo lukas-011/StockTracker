@@ -36,7 +36,11 @@ We are going to use the Flask framework with Python to do this
 
 ---
 ### Frontend
-- Need to call the API repetitively (Every 1 second maybe)
-- Red if the number went down
-- Green if the number went up
-- And then a tab to get all the stock tags
+- Page Layout (html/css)
+	- Red if the number went down
+	- Green if the number went up
+	- a tab to get all the stock tags
+- Connect front-end & backend; Call API (JavaScript)
+	- Need to call the API repetitively (Every 1 second maybe)
+
+
