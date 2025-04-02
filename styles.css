@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.stock-item {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.price-down { 
+    color: red; 
+}
+
+.price-up { 
+    color: green; 
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Price Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!--Graph and tables are entered here-->
+    <div id="stockTable">
+        <div class="stock-item">
+            <!--Color will change base on fall/rise of price-->>
+            <strong>AAPL</strong>: 
+            <span id="aaplPrice" data-previous-price="175.50">180.25</span>
+        </div>
+        <div class="stock-item">
+            <strong>GOOGL</strong>: 
+            <span id="googlPrice" data-previous-price="120.75">118.60</span>
+        </div>
+        <div class="stock-item">
+            <strong>MSFT</strong>: 
+            <span id="msftPrice" data-previous-price="330.20">335.45</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
