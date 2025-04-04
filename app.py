@@ -1,14 +1,18 @@
-from flask import Flask
-import requests 
+from flask import Flask, request, render_template, jsonify
 
 # Gonna use Alpha advantage for API's
 
 
 app = Flask(__name__)
 
+
+"""
+This function returns the rendered index.html file
+"""
 @app.route("/")
 def index():
-    return 'Index Page'
+    return render_template('index.html')
+
 
 """
 This function returns the price of a stock based off of the stock tag requested
@@ -19,7 +23,13 @@ Parameters:
 Returns:
     str: a string of the stock price requested
 """
-def getStock(stockTag:str) -> str:
+@app.route('/api/getStockPrice', methods=['GET'])
+def getStockPrice():
+    data = request.get_json()
+    tag = request.get('tag')
+    return "stock: stock prices"
+    
 
 
-def getTags() -> list[str]:
+def getTags():
+    return
