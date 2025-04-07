@@ -26,6 +26,10 @@ stocks = {
 }
 
 app = Flask(__name__)
+# This just starts the server
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
 """
 This function returns the rendered index.html file when we access the homepage
@@ -79,4 +83,9 @@ Returns:
 """
 def generateStockPrice(high, low):
     return round(random.uniform(low, high), 2)
+
+
+
+
+
 
