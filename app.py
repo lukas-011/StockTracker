@@ -72,7 +72,7 @@ Returns:
     a list of all the stock tags the user can select from
 """
 @app.route('/api/getStockTags', methods=['GET'])
-def getTags():
+def getStockTags():
     return jsonify(list(stocks.keys()))
     
 #**************************************************************************************************
