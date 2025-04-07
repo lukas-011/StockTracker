@@ -10,6 +10,7 @@ services:
       - mongodb
     environment:
       - MONGO_URI=mongodb://mongodb:27017/stock_db
+      - FLASK_ENV=development
 
   mongodb:
     image: mongo:latest

@@ -8,7 +8,7 @@ app = Flask(__name__)
 if __name__ == '__main__':
     app.run(debug=True)
 
-# Gives us access to the mongodb stock_data collection
+# Gives us access to the mongodb stock_data collection 
 mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/stock_db")
 client = MongoClient(mongo_uri)
 db = client["stock_db"]
@@ -38,7 +38,7 @@ stocks = {
     'T': {'low': 20, 'high': 30}
 }
 
-# Convert to list of documents and insert into the db
+# Convert to list of documents and insert into the db so we don't have to do it through an external file
 documents = [{"symbol": key, "low": value["low"], "high": value["high"]} for key, value in stocks.items()]
 collection.insert_many(documents)
 
@@ -62,14 +62,21 @@ Returns:
 """
 @app.route('/api/getStockPrice', methods=['GET'])
 def getStockPrice():
-    # Make sure the requested tag is uppercase
-    tag = request.args.get("tag").upper()
+    # Make sure the requested tag is uppercase or a blank string if tag doesn't exist
+    tag = request.args.get("tag", "").upper()
 
-    # Grab the details of that stock tag from the stocks dictionary
-    stock = stocks[tag]
+    # Grab the details of that stock tag from the MongoDB database
+    stock = collection.find_one({"symbol": tag})
+    
+    # If there is no stock then return a 404 page not found error
+    if not stock:
+        return jsonify({"error": f"Stock symbol '{tag}' not found"}), 404
 
-    # Return the randomized value of that stock in a JSON format
-    return jsonify(generateStockPrice(stock))
+    # calculate the price based off of the stock
+    price = generateStockPrice(stock)
+
+    # return that price
+    return jsonify({"price": price})
 
 #**************************************************************************************************
 
@@ -84,7 +91,9 @@ Returns:
 """
 @app.route('/api/getStockTags', methods=['GET'])
 def getStockTags():
-    return jsonify(list(stocks.keys()))
+    stock_tags_cursor = collection.find({}, {"_id": 0, "symbol": 1})
+    list_of_tags = [doc["symbol"] for doc in stock_tags_cursor]
+    return jsonify(list_of_tags)
     
 #**************************************************************************************************
 
@@ -102,9 +111,3 @@ Returns:
 def generateStockPrice(stock):
     print(stock)
     return round(random.uniform(stock["low"], stock["high"]), 2)
-
-
-
-
-
-
