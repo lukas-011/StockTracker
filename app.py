@@ -1,5 +1,11 @@
 from flask import Flask, request, render_template, jsonify
+from pymongo import MongoClient
 import random
+
+# Gives us access to the mongodb Collection
+client = MongoClient("mongodb://mongo:27017")
+db = client["stock_db"]
+collection = db["stock_data"]
 
 # Randomly generated stocks for the random number generator
 stocks = {
@@ -24,6 +30,11 @@ stocks = {
     'ADBE': {'low': 450, 'high': 500},
     'T': {'low': 20, 'high': 30}
 }
+
+# Convert to list of documents and insert into the db
+documents = [{"symbol": k, "low": v["low"], "high": v["high"]} for k, v in stocks.items()]
+collection.insert_many(documents)
+
 
 app = Flask(__name__)
 # This just starts the server
