@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  flask:
+    # "build ." allows us to build our custom image in the Dockerfile in our current directory
+    build: .
+    ports:
+      -"5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/stock_db
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      -"27017:27017"
+    volumes:
+      -mongo_data:/data/db
+
+volumes:
+  mongo_data:

@@ -1,9 +1,16 @@
+import os
 from flask import Flask, request, render_template, jsonify
 from pymongo import MongoClient
 import random
 
-# Gives us access to the mongodb Collection
-client = MongoClient("mongodb://mongo:27017")
+# This just starts the server in debug mode
+app = Flask(__name__)
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# Gives us access to the mongodb stock_data collection
+mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/stock_db")
+client = MongoClient(mongo_uri)
 db = client["stock_db"]
 collection = db["stock_data"]
 
@@ -32,15 +39,8 @@ stocks = {
 }
 
 # Convert to list of documents and insert into the db
-documents = [{"symbol": k, "low": v["low"], "high": v["high"]} for k, v in stocks.items()]
+documents = [{"symbol": key, "low": value["low"], "high": value["high"]} for key, value in stocks.items()]
 collection.insert_many(documents)
-
-
-app = Flask(__name__)
-# This just starts the server
-if __name__ == '__main__':
-    app.run(debug=True)
-
 
 """
 This function returns the rendered index.html file when we access the homepage
