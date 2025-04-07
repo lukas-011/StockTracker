@@ -1,8 +1,8 @@
 // Fetch api
-async function fetchStockData() {
+async function fetchStockData(tag) {
     try {
-        // Replace with actual api endpoint
-        const response = await fetch('https://ourapi.com/stonks', {
+        // requesting stock data from the server
+        const response = await fetch(`http://127.0.0.1:5000/api/getStockPrice?tag=${encodedURIComponent(tag)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -51,7 +51,14 @@ Returns:
 """
 @app.route('/api/getStockPrice', methods=['GET'])
 def getStockPrice():
-    return "stock: stock prices"
+    # Make sure the requested tag is uppercase
+    tag = request.args.get("tag").upper()
+
+    # Grab the details of that stock tag from the stocks dictionary
+    stock = stocks[tag]
+
+    # Return the randomized value of that stock in a JSON format
+    return jsonify(generateStockPrice(stock))
 
 #**************************************************************************************************
 
@@ -66,7 +73,7 @@ Returns:
 """
 @app.route('/api/getStockTags', methods=['GET'])
 def getTags():
-    return
+    return jsonify(list(stocks.keys()))
     
 #**************************************************************************************************
 
@@ -81,8 +88,9 @@ Parameters:
 Returns:
     float: a float value of the stock price
 """
-def generateStockPrice(high, low):
-    return round(random.uniform(low, high), 2)
+def generateStockPrice(stock):
+    print(stock)
+    return round(random.uniform(stock["low"], stock["high"]), 2)
 
 
 
