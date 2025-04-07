@@ -14,7 +14,7 @@ client = MongoClient(mongo_uri)
 db = client["stock_db"]
 collection = db["stock_data"]
 
-# Randomly generated stocks for the random number generator
+# Randomly generated stocks for our database
 stocks = {
     'AAPL': {'low': 150, 'high': 180},
     'MSFT': {'low': 270, 'high': 300},
