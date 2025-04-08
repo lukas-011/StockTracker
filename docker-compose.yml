@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   flask:
     # "build ." allows us to build our custom image in the Dockerfile in our current directory

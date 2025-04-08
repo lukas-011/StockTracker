@@ -53,6 +53,14 @@ def index():
     return render_template('index.html')
 
 #**************************************************************************************************
+"""
+This function returns the rendered tag-search.html file when we access the tag search page
+"""
+@app.route("/tag-search.html")
+def tag_search():
+    return render_template('tag-search.html')
+
+#**************************************************************************************************
 
 """
 This function returns the price of a stock based off of the stock tag requested
