@@ -2,17 +2,10 @@
 async function fetchStockData(tag) {
     try {
         // requesting stock data from the server
-        const response = await fetch(`http://127.0.0.1:5000/api/getStockPrice?tag=${encodedURIComponent(tag)}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+        const response = await fetch(`/api/getStockPrice?tag=${encodeURIComponent(tag)}`);
 
         //Checking network
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+        if (!response.ok) throw new Error('Network response was not ok');
 
         const stockData = await response.json();
         updateStocksFromAPI(stockData);
@@ -23,7 +16,7 @@ async function fetchStockData(tag) {
 
 // update stock prices
 function updateStocksFromAPI(stockData) {
-    const stockPrices = document.querySelectorAll('#stockTable span');
+    const stockPrices = document.querySelector('#stockPrice span');
     
     stockPrices.forEach((priceElement, index) => {
         // API returns array of stock objects
