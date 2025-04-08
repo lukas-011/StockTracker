@@ -30,5 +30,28 @@
         </ul>
     </header>
     
+    <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="card shadow rounded-4">
+              <div class="card-body">
+                <h5 class="card-title fw-bold text-center mb-4">Track a Stock</h5>
+                <div class="mb-3">
+                  <label for="stockTicker" class="form-label">Enter Stock Ticker</label>
+                  <input type="text" class="form-control" id="stockTicker" placeholder="e.g. AAPL">
+                </div>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-primary" id="trackBtn">Track</button>
+                </div>
+                <div class="mt-4 text-center">
+                  <h6 class="fw-semibold">Current Price:</h6>
+                  <span id="stockPrice" class="fs-4 fw-bold text-muted">$--.--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
 </body>
 </html>
