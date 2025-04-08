@@ -40,7 +40,10 @@ stocks = {
 
 # Convert to list of documents and insert into the db so we don't have to do it through an external file
 documents = [{"symbol": key, "low": value["low"], "high": value["high"]} for key, value in stocks.items()]
-collection.insert_many(documents)
+
+# If there is no data in our database put the data in there
+if collection.count_documents({}) == 0:
+    collection.insert_many(documents)
 
 """
 This function returns the rendered index.html file when we access the homepage
