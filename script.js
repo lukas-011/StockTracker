@@ -23,22 +23,28 @@ async function fetchStockData() {
 
 // update stock prices
 function updateStocksFromAPI(stockData) {
-    const stockPrices = document.querySelectorAll('#stockTable span');
-    
-    stockPrices.forEach((priceElement, index) => {
-        // API returns array of stock objects
-        if (stockData[index]) {
-            const previousPrice = parseFloat(priceElement.dataset.previousPrice);
-            const newPrice = stockData[index].price;
+    const rows = document.querySelectorAll('#stockTable tbody tr');
+    // gets info by row
+    rows.forEach(row => {
+        const symbol = row.dataset.symbol;
+        if (stockData[symbol]) {
+            const priceElement = row.querySelector('span');
+            if (priceElement) {
+                const previousPrice = parseFloat(priceElement.dataset.previousPrice) || 0;
+                const newPrice = stockData[symbol].price;
 
-            // Update price and previous price
-            priceElement.dataset.previousPrice = previousPrice.toFixed(2);
-            priceElement.textContent = newPrice.toFixed(2);
+                priceElement.dataset.previousPrice = previousPrice.toFixed(2);
+                priceElement.textContent = newPrice.toFixed(2);
+
+                priceElement.classList.remove('price-up', 'price-down');
+                if (newPrice > previousPrice) {
+                    priceElement.classList.add('price-up');
+                } else if (newPrice < previousPrice) {
+                    priceElement.classList.add('price-down');
+                }
+            }
         }
-    });
-
-    // Reapply color changes
-    updateStockColors();
+    })
 }
 // POST request example for updating stocks
 async function updateStockPrice(stockSymbol, newPrice) {
@@ -70,7 +76,7 @@ async function updateStockPrice(stockSymbol, newPrice) {
 function initStockTracking() {
     // Fetch stock data
     fetchStockData();
-
+}
 // Call initialization when page loads
 document.addEventListener('DOMContentLoaded', initStockTracking);
 
