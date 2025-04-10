@@ -9,25 +9,29 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body class="bg-dark w-100 h-100">
+  <!--Navigation Bar for Dashboard-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Stock Tracker</a>
+      <a class="navbar-brand" href="#">TEAM 7 DEMO</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-          <a class="nav-link" href="#">Index</a>
-
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <!--Tag Search-->
+          <a class="nav-link" href="/tag-search.html">Tag Search</a>
         </div>
       </div>
     </div>
   </nav>
-  <main>
+
+  <main class="container-fluid">
+    <h2>Dashboard</h2>
+    <canvas class="my-4 w-100" id="myChart" width="637" height="269" style="display: block; box-sizing: border-box; height: 244px; width: 579px;"></canvas>
     <h2>Stock List</h2>
     <div class="table-container">
-      <table class="table table-custom table-striped">
+      <table class="table table-custom table-striped table-dark table-hover" id="stockTable">
           <thead>
             <tr>
               <th scope="col">Symbol</th>
@@ -36,113 +40,113 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr data-symbol="AAPL">
               <th scope="row">AAPL</th>
               <td>Apple Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="MSFT">
               <th scope="row">MSFT</th>
               <td>Microsoft Corp</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="GOOG">
               <th scope="row">GOOG</th>
               <td>Alphabet Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="AMZN">
               <th scope="row">AMZN</th>
               <td>Amazon.com Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="TSLA">
               <th scope="row">TSLA</th>
               <td>Tesla Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="META">
               <th scope="row">META</th>
               <td>Meta Platforms Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="NVDA">
               <th scope="row">NVDA</th>
               <td>NVIDIA Corp</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="NFLX">
               <th scope="row">NFLX</th>
               <td>Netflix Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="BRKB">
               <th scope="row">BRK.B</th>
               <td>Berkshire Hathaway Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="JNJ">
               <th scope="row">JNJ</th>
               <td>Johnson & Johnson</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="WMT">
               <th scope="row">WMT</th>
               <td>Walmart Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="V">
               <th scope="row">V</th>
               <td>Visa Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="PG">
               <th scope="row">PG</th>
               <td>Procter & Gamble Co</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="KO">
               <th scope="row">KO</th>
               <td>Coca-Cola Co</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="PEP">
               <th scope="row">PEP</th>
               <td>PepsiCo Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="INTC">
               <th scope="row">INTC</th>
               <td>Intel Corp</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="MCD">
               <th scope="row">MCD</th>
               <td>McDonalds Corp</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="XOM">
               <th scope="row">XOM</th>
               <td>Exxon Mobil Corp</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="ADBE">
               <th scope="row">ADBE</th>
               <td>Adobe Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
-            <tr>
+            <tr data-symbol="T">
               <th scope="row">T</th>
               <td>AT&T Inc</td>
-              <td class="price-placeholder">[ enter price ]</td>
+              <td><span data-previous-price="0.00">[ loading... ]</span></td>
             </tr>
           </tbody>
-        </table>
+      </table>
       </div>
     </main>
     </header> 
     <script src="script.js"></script>
-    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.min.js"></script>
