@@ -1,4 +1,4 @@
-/*Bootstrap Table Theme for Stock Tracker */
+/* Custom Bootstrap Table Theme for Stock Tracker */
 .table-custom {
     border-radius: 8px;
     overflow: hidden;
@@ -37,11 +37,6 @@
 .table-custom th[scope="row"] {
     font-weight: 600;
     color: #7D8CC4;
-}
-
-.price-placeholder {
-    font-style: italic;
-    color: #6c757d;
 }
 
 .price-up {
