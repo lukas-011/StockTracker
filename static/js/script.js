@@ -178,13 +178,6 @@ function initStockTracking() {
     // Set up periodic data refresh (every 10 seconds)
     setInterval(fetchStockData, 2000);
 }
-
-// Initial setup
-function initStockTracking() {
-    // Fetch stock data
-    fetchStockData();
-}
-
 // Call initialization when page loads
 document.addEventListener('DOMContentLoaded', initStockTracking);
 
