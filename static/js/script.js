@@ -3,53 +3,42 @@ This function changes the current price and color of the price
 based on the tag parameter passed into it
 */
 async function fetchStockData(tag) {
-    try {
-        // requesting stock data from the server
-        const response = await fetch(`/api/getStockPrice?tag=${encodeURIComponent(tag)}`);
+    // Grab all the rows for each stock
+    const rows = document.querySelectorAll('#stockTable tr');
 
-        // Checking network
-        if (!response.ok) throw new Error('Network response was not ok');
+    // Iterate through all the rows
 
-        // If the network is ok, update the stock price from the data requested
-        const stockData = await response.json();
+    for (const row of rows) {
+        const symbol = row.getAttribute('data-symbol');
+        const priceElement = row.querySelector('td span')
 
-        // Update the stock price element
-        console.log(stockData)
-        updateStockPriceFromAPI(stockData["price"]);
+        try {
+            // Make API call to the flask API
+            const response = await fetch(`/api/getStockPrice?tag=${encodeURIComponent(tag)}`);
+            const data = await response.json();
 
-    } catch (error) {
-        console.error('Error fetching stock data:', error);
+            // Get the price field from the JSON
+            const price = data.price;
+
+            // Update the price in the table
+            priceElement.textContent = `$${price.toFixed(2)}`;
+            priceElement.setAttribute('data-previous-price', price);
+
+            // Call function to update the color of the price
+            updateStockColors(newPrice, oldPrice, priceElement)
+        } catch (error) {
+            console.error(`Error fetching price for ${symbol}:`, error);
+            priceElement.textContent = '[ error ]';
+        }
     }
-
-
 }
 
-// update stock prices
-function updateStockPriceFromAPI(newPrice) {
-
-    // Grab the stock price element in our html document
-    const stockPriceElement = document.getElementById('stockPrice');
-
-    // Get old price from text content, strip the $ and convert to number
-    const oldPrice = parseFloat(stockPriceElement.textContent.replace('$', ''));
-
-    // If oldPrice isn't set to a number, then skip this
-    if(!isNaN(oldPrice)){
-        // Apply color changes based on new and old price
-        updateStockColors(newPrice, oldPrice);
-    }
-
-    // Set the content inside
-    stockPriceElement.value = `$${newPrice.toFixed(2)}`;
-}
-
-
-// Existing color update function remains the same
-
-function updateStockColors(newPrice, oldPrice) {
+/*
+This function changes the color of the price based on the old price
+*/
+function updateStockColors(newPrice, oldPrice, priceElement) {
     const currentPrice = parseFloat(oldPrice);
     const previousPrice = parseFloat(newPrice);
-    const priceElement = document.getElementById('stockPrice')
 
     // Remove existing color
     priceElement.classList.remove('text-success', 'text-danger');
@@ -61,12 +50,6 @@ function updateStockColors(newPrice, oldPrice) {
         priceElement.classList.add('text-danger');
     }
 }
-
-// Store historical data for the chart
-let stockHistoryData = {};
-
-// Initialize Chart.js line chart
-let stockChart;
 
 function initStockChart() {
     const ctx = document.getElementById('stockChart').getContext('2d');
@@ -181,8 +164,8 @@ function initStockTracking() {
     // Fetch stock data
     fetchStockData();
     
-    // Set up periodic data refresh (every 30 seconds)
-    setInterval(fetchStockData, 30000);
+    // Set up periodic data refresh (every 10 seconds)
+    setInterval(fetchStockData, 10000);
 }
 
 // Initial setup
@@ -190,5 +173,12 @@ function initStockTracking() {
     // Fetch stock data
     fetchStockData();
 }
+
 // Call initialization when page loads
 document.addEventListener('DOMContentLoaded', initStockTracking);
+
+// Store historical data for the chart
+let stockHistoryData = {};
+
+// Initialize Chart.js line chart
+let stockChart;
