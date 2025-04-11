@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // If the search box is empty, show all stock tags
         if (query.length === 0) {
             const stockTags = await fetchStockTags();
-            renderStockResults(stockTags); // Render all stock tags
+            renderStockResults(stockTags); 
             return;
         }
 
