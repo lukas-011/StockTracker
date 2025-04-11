@@ -1,127 +1,64 @@
-// Fetch api
-async function fetchStockData() {
+/*
+This function changes the current price and color of the price
+based on the tag parameter passed into it
+*/
+async function fetchStockData(tag) {
     try {
-        // Replace with actual api endpoint
-        const response = await fetch('https://ourapi.com/stonks', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+        // requesting stock data from the server
+        const response = await fetch(`/api/getStockPrice?tag=${encodeURIComponent(tag)}`);
 
-        //Checking network
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+        // Checking network
+        if (!response.ok) throw new Error('Network response was not ok');
 
+        // If the network is ok, update the stock price from the data requested
         const stockData = await response.json();
-        updateStocksFromAPI(stockData);
+
+        // Update the stock price element
+        console.log(stockData)
+        updateStockPriceFromAPI(stockData["price"]);
+
     } catch (error) {
         console.error('Error fetching stock data:', error);
     }
+
+
 }
 
 // update stock prices
-function updateStocksFromAPI(stockData) {
-    const rows = document.querySelectorAll('#stockTable tbody tr');
-    // gets info by row
-    rows.forEach(row => {
-        const symbol = row.dataset.symbol;
-        if (stockData[symbol]) {
-            const priceElement = row.querySelector('span');
-            if (priceElement) {
-                const previousPrice = parseFloat(priceElement.dataset.previousPrice) || 0;
-                const newPrice = stockData[symbol].price;
+function updateStockPriceFromAPI(newPrice) {
 
-                priceElement.dataset.previousPrice = previousPrice.toFixed(2);
-                priceElement.textContent = newPrice.toFixed(2);
+    // Grab the stock price element in our html document
+    const stockPriceElement = document.getElementById('stockPrice');
 
-                priceElement.classList.remove('price-up', 'price-down');
-                if (newPrice > previousPrice) {
-                    priceElement.classList.add('price-up');
-                } else if (newPrice < previousPrice) {
-                    priceElement.classList.add('price-down');
-                }
-            }
-        }
-    })
-}
-// POST request example for updating stocks
-async function updateStockPrice(stockSymbol, newPrice) {
-    try {
-        const response = await fetch('https://ourapi.com/stonks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // Add authentication if needed
-            },
-            body: JSON.stringify({
-                symbol: stockSymbol,
-                price: newPrice
-            })
-        });
+    // Get old price from text content, strip the $ and convert to number
+    const oldPrice = parseFloat(stockPriceElement.textContent.replace('$', ''));
 
-        if (!response.ok) {
-            throw new Error('Failed to update stock price');
-        }
-
-        const result = await response.json();
-        console.log('Stock update response:', result);
-    } catch (error) {
-        console.error('Error updating stock:', error);
+    // If oldPrice isn't set to a number, then skip this
+    if(!isNaN(oldPrice)){
+        // Apply color changes based on new and old price
+        updateStockColors(newPrice, oldPrice);
     }
+
+    // Set the content inside
+    stockPriceElement.value = `$${newPrice.toFixed(2)}`;
 }
 
-// Initial setup
-function initStockTracking() {
-    // Fetch stock data
-    fetchStockData();
-}
-// Call initialization when page loads
-document.addEventListener('DOMContentLoaded', initStockTracking);
 
 // Existing color update function remains the same
-function updateStockColors() {
-    const stockPrices = document.querySelectorAll('#stockTable span');
-    
-    stockPrices.forEach(priceElement => {
-        const currentPrice = parseFloat(priceElement.textContent);
-        const previousPrice = parseFloat(priceElement.dataset.previousPrice);
 
-        // Remove existing color
-        priceElement.classList.remove('price-up', 'price-down');
+function updateStockColors(newPrice, oldPrice) {
+    const currentPrice = parseFloat(oldPrice);
+    const previousPrice = parseFloat(newPrice);
+    const priceElement = document.getElementById('stockPrice')
 
-        // Add color
-        if (currentPrice > previousPrice) {
-            priceElement.classList.add('price-up');
-        } else if (currentPrice < previousPrice) {
-            priceElement.classList.add('price-down');
-        }
-    });
-};
-// POST request example for updating stocks
-async function updateStockPrice(stockSymbol, newPrice) {
-    try {
-        const response = await fetch('https://ourapi.com/stonks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // Add authentication if needed
-            },
-            body: JSON.stringify({
-                symbol: stockSymbol,
-                price: newPrice
-            })
-        });
+    // Remove existing color
+    priceElement.classList.remove('text-success', 'text-danger');
 
-        if (!response.ok) {
-            throw new Error('Failed to update stock price');
-        }
-
-        const result = await response.json();
-        console.log('Stock update response:', result);
-    } catch (error) {
-        console.error('Error updating stock:', error);
+    // Add color
+    if (currentPrice > previousPrice) {
+        priceElement.classList.add('text-success');
+    } else if (currentPrice < previousPrice) {
+        priceElement.classList.add('text-danger');
     }
 }
 
@@ -248,25 +185,10 @@ function initStockTracking() {
     setInterval(fetchStockData, 30000);
 }
 
-// Call init when page loads
-document.addEventListener('DOMContentLoaded', initStockTracking);
-
-// Existing color update function remains the same
-function updateStockColors() {
-    const stockPrices = document.querySelectorAll('#stockTable span');
-    
-    stockPrices.forEach(priceElement => {
-        const currentPrice = parseFloat(priceElement.textContent);
-        const previousPrice = parseFloat(priceElement.dataset.previousPrice);
-
-        // Remove existing color
-        priceElement.classList.remove('price-up', 'price-down');
-
-        // Add color
-        if (currentPrice > previousPrice) {
-            priceElement.classList.add('price-up');
-        } else if (currentPrice < previousPrice) {
-            priceElement.classList.add('price-down');
-        }
-    });
+// Initial setup
+function initStockTracking() {
+    // Fetch stock data
+    fetchStockData();
 }
+// Call initialization when page loads
+document.addEventListener('DOMContentLoaded', initStockTracking);
