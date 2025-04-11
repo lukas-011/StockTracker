@@ -1,55 +1,66 @@
-/*
-This function changes the current price and color of the price
-based on the tag parameter passed into it
-*/
-async function fetchStockData(tag) {
-    // Grab all the rows for each stock
-    const rows = document.querySelectorAll('#stockTable tr');
+document.addEventListener('DOMContentLoaded', function () {
+    async function fetchStockData() {
+        // Grab all the rows for each stock
+        const rows = document.querySelectorAll('#stockTable tr');
 
-    // Iterate through all the rows
+        // Iterate through all the rows
+        for (const row of rows) {
+            const symbol = row.getAttribute('data-symbol');
+            const priceElement = row.querySelector('td span'); // Ensure this is correctly targeting the span
 
-    for (const row of rows) {
-        const symbol = row.getAttribute('data-symbol');
-        const priceElement = row.querySelector('td span')
+            // Check if we successfully found the price element
+            if (!priceElement) {
+                console.error(`Price element not found for ${symbol}`);
+                continue; // Skip to the next row if priceElement is missing
+            }
 
-        try {
-            // Make API call to the flask API
-            const response = await fetch(`/api/getStockPrice?tag=${encodeURIComponent(tag)}`);
-            const data = await response.json();
+            try {
+                // Make API call to the flask API
+                const response = await fetch(`/api/getStockPrice?tag=${encodeURIComponent(symbol)}`);
+                const data = await response.json();
 
-            // Get the price field from the JSON
-            const price = data.price;
+                // Get the price field from the JSON
+                const newPrice = data["price"];
+                const oldPrice = priceElement.getAttribute('data-previous-price') || 0;
 
-            // Update the price in the table
-            priceElement.textContent = `$${price.toFixed(2)}`;
-            priceElement.setAttribute('data-previous-price', price);
+                // Update the price in the table
+                priceElement.textContent = `$${newPrice.toFixed(2)}`;
+                priceElement.setAttribute('data-previous-price', newPrice);
 
-            // Call function to update the color of the price
-            updateStockColors(newPrice, oldPrice, priceElement)
-        } catch (error) {
-            console.error(`Error fetching price for ${symbol}:`, error);
-            priceElement.textContent = '[ error ]';
+                // Call function to update the color of the price
+                updateStockColors(newPrice, oldPrice, priceElement);
+
+            } catch (error) {
+                console.error(`Error fetching price for ${symbol}:`, error);
+                priceElement.textContent = '[ error ]';
+            }
         }
     }
-}
 
-/*
-This function changes the color of the price based on the old price
-*/
-function updateStockColors(newPrice, oldPrice, priceElement) {
-    const currentPrice = parseFloat(oldPrice);
-    const previousPrice = parseFloat(newPrice);
+    /*
+    This function changes the color of the price based on the old price
+    */
+    function updateStockColors(newPrice, oldPrice, priceElement) {
+        const currentPrice = parseFloat(oldPrice);
+        const previousPrice = parseFloat(newPrice);
 
-    // Remove existing color
-    priceElement.classList.remove('text-success', 'text-danger');
+        // Remove existing color
+        priceElement.classList.remove('text-success', 'text-danger');
 
-    // Add color
-    if (currentPrice > previousPrice) {
-        priceElement.classList.add('text-success');
-    } else if (currentPrice < previousPrice) {
-        priceElement.classList.add('text-danger');
+        // Add color
+        if (currentPrice <= previousPrice) {
+            priceElement.classList.add('text-success');
+        } else if (currentPrice > previousPrice) {
+            priceElement.classList.add('text-danger');
+        }
     }
-}
+
+    // Fetch stock data initially
+    fetchStockData();
+
+    // Set up periodic data refresh (every 10 seconds)
+    setInterval(fetchStockData, 10000);
+});
 
 function initStockChart() {
     const ctx = document.getElementById('stockChart').getContext('2d');
@@ -165,7 +176,7 @@ function initStockTracking() {
     fetchStockData();
     
     // Set up periodic data refresh (every 10 seconds)
-    setInterval(fetchStockData, 10000);
+    setInterval(fetchStockData, 2000);
 }
 
 // Initial setup
